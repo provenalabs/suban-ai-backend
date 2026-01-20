@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Justin Lee AI backend uses a dual-provider AI architecture with **DeepSeek** and **Grok (xAI)** as the exclusive AI service providers. The system implements intelligent routing, cost control, and comprehensive usage tracking to deliver cost-efficient AI services while maintaining high-quality responses.
+The Suban AI backend uses a dual-provider AI architecture with **DeepSeek** and **Grok (xAI)** as the exclusive AI service providers. The system implements intelligent routing, cost control, and comprehensive usage tracking to deliver cost-efficient AI services while maintaining high-quality responses.
 
 ## Core Principles
 
@@ -228,7 +228,7 @@ cost = (sessionDurationMinutes / 3) * 0.10
 
 **Base Prompt**:
 ```
-You are Justin Lee AI, a personal analyst specializing in:
+You are Suban AI, a personal analyst specializing in:
 - Chart scenarios and technical analysis
 - Emotional processing and trading psychology
 - Risk management strategies

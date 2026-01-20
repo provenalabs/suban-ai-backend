@@ -26,13 +26,11 @@ class EnvValidator {
         this.validateRequired('MONGODB_URI', 'MongoDB connection string');
         // LLM API Keys (at least one required)
         const llmKeys = [
-            process.env.OPENAI_API_KEY,
-            process.env.CLAUDE_API_KEY,
             process.env.GROK_API_KEY,
             process.env.DEEPSEEK_API_KEY,
         ];
         if (!llmKeys.some(key => key)) {
-            this.config.errors.push('At least one LLM API key is required (OPENAI_API_KEY, CLAUDE_API_KEY, GROK_API_KEY, or DEEPSEEK_API_KEY)');
+            this.config.errors.push('At least one LLM API key is required (GROK_API_KEY or DEEPSEEK_API_KEY)');
         }
         // Optional but recommended
         this.validateOptional('SOLANA_RPC_URL', 'https://api.mainnet-beta.solana.com', 'Solana RPC endpoint');
@@ -40,14 +38,11 @@ class EnvValidator {
         this.validateOptional('JUPITER_API_KEY', null, 'Jupiter API key (required for Ultra API endpoint)');
         this.validateOptional('BACKEND_WALLET_PRIVATE_KEY', null, 'Backend wallet private key for settlement (BASE58 encoded)');
         this.validateOptional('ADMIN_WALLET_ADDRESSES', null, 'Comma-separated list of admin wallet addresses');
-        this.validateOptional('ELEVENLABS_API_KEY', null, 'ElevenLabs API key for TTS (voice features will be disabled if missing)');
-        this.validateOptional('ELEVENLABS_VOICE_ID', '21m00Tcm4TlvDq8ikWAM', 'ElevenLabs voice ID');
         this.validateOptional('PORT', '5000', 'Server port');
         this.validateOptional('NODE_ENV', 'development', 'Node environment (development/production)');
         // Cost configuration (optional, have defaults)
         this.validateOptional('DEFAULT_CHAT_COST_USD', '0.02', 'Default chat cost in USD');
-        this.validateOptional('DEFAULT_VOICE_COST_USD', '0.05', 'Default voice cost in USD');
-        this.validateOptional('STT_COST_USD', '0.01', 'Speech-to-text cost in USD');
+        this.validateOptional('DEFAULT_VOICE_COST_USD', '0.10', 'Default voice session cost in USD (Grok Voice Agent)');
         // Settlement configuration
         this.validateOptional('SETTLEMENT_PROGRAM_ID', null, 'Solana settlement program ID (optional)');
         this.validateOptional('SETTLEMENT_INTERVAL_MINUTES', '60', 'Settlement batch interval in minutes');
@@ -62,9 +57,6 @@ class EnvValidator {
         }
         if (!process.env.ADMIN_WALLET_ADDRESSES) {
             this.config.warnings.push('ADMIN_WALLET_ADDRESSES not set. Admin endpoints are unprotected.');
-        }
-        if (!process.env.ELEVENLABS_API_KEY) {
-            this.config.warnings.push('ELEVENLABS_API_KEY not set. Text-to-speech features will be disabled.');
         }
         if (!process.env.SOLANA_RPC_URL) {
             this.config.warnings.push('SOLANA_RPC_URL not set. Using public RPC (rate limited).');

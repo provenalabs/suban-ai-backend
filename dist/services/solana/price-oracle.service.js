@@ -31,15 +31,6 @@ class PriceOracleService {
         this.twapWindowMinutes = parseInt(process.env.TWAP_WINDOW_MINUTES || '10');
         this.burnFloor = parseFloat(process.env.BURN_FLOOR || '0.05');
         this.burnCeiling = parseFloat(process.env.BURN_CEILING || '50');
-        // Add fallback price (defaults to 0.001 if not set)
-        const fallback = process.env.FALLBACK_TOKEN_PRICE;
-        if (fallback) {
-            const price = parseFloat(fallback);
-            if (!isNaN(price) && price > 0) {
-                console.log(`  Price Oracle: Using initial fallback price of $${price}`);
-                this.priceCache.push({ price, timestamp: Date.now() });
-            }
-        }
         // Validate token mint address on construction
         if (!this.tokenMintAddress) {
             console.warn('  TOKEN_MINT_ADDRESS not configured. Price oracle will not work.');
@@ -57,71 +48,49 @@ class PriceOracleService {
      */
     fetchCurrentPrice() {
         return __awaiter(this, void 0, void 0, function* () {
-            const endpoints = [
-                this.jupiterApiUrl,
-                'https://api.jup.ag/price/v2',
-                'https://price.jup.ag/v6/price',
-                'https://price.jup.ag/v4/price'
-            ];
-            // Remove duplicates and normalize
-            const uniqueEndpoints = [...new Set(endpoints.filter(Boolean))].map(url => url.replace(/\/$/, ''));
-            let lastError = null;
-            for (const baseUrl of uniqueEndpoints) {
-                try {
-                    let apiUrl = baseUrl;
-                    // Construct correct path if only base is provided
-                    if (apiUrl === 'https://api.jup.ag') {
-                        apiUrl = 'https://api.jup.ag/price/v2';
-                    }
-                    else if (apiUrl === 'https://price.jup.ag') {
-                        apiUrl = 'https://price.jup.ag/v6/price';
-                    }
-                    else if (!apiUrl.includes('/price') && !apiUrl.includes('ultra')) {
-                        if (apiUrl.match(/\/v\d+$/)) {
-                            apiUrl = `${apiUrl}/price`;
-                        }
-                        else {
-                            // Default fallback for unknown bases
-                            apiUrl = `${apiUrl}/price`;
-                        }
-                    }
-                    const headers = { 'Accept': 'application/json' };
-                    if (this.jupiterApiKey && apiUrl.includes('api.jup.ag')) {
-                        headers['X-API-Key'] = this.jupiterApiKey;
-                    }
-                    const response = yield axios_1.default.get(apiUrl, {
-                        params: { ids: this.tokenMintAddress },
-                        timeout: 5000,
-                        headers,
-                    });
-                    if (!response.data || (!response.data.data && !response.data[this.tokenMintAddress])) {
-                        continue;
-                    }
-                    const priceData = response.data.data ? response.data.data[this.tokenMintAddress] : response.data[this.tokenMintAddress];
-                    if (!priceData || (priceData.price === undefined && priceData.price === null)) {
-                        continue;
-                    }
-                    const price = parseFloat(priceData.price);
-                    if (isNaN(price) || price <= 0)
-                        continue;
-                    this.priceCache.push({ price, timestamp: Date.now() });
-                    this.cleanCache();
-                    console.log(` Current token price from ${baseUrl}: $${price}`);
-                    return price;
+            try {
+                if (!this.tokenMintAddress) {
+                    throw new Error('TOKEN_MINT_ADDRESS not configured');
                 }
-                catch (error) {
-                    lastError = error;
-                    continue; // Try next endpoint
+                let apiUrl = this.jupiterApiUrl;
+                const headers = { 'Accept': 'application/json' };
+                if (this.jupiterApiKey && apiUrl.includes('api.jup.ag')) {
+                    headers['X-API-Key'] = this.jupiterApiKey;
                 }
+                const response = yield axios_1.default.get(apiUrl, {
+                    params: { ids: this.tokenMintAddress },
+                    timeout: 10000,
+                    headers,
+                });
+                if (!response.data) {
+                    throw new Error('No data received from Jupiter API');
+                }
+                const priceData = response.data.data ? response.data.data[this.tokenMintAddress] : response.data[this.tokenMintAddress];
+                if (!priceData) {
+                    throw new Error(`Price data not found for token: ${this.tokenMintAddress}`);
+                }
+                const priceValue = priceData.usdPrice !== undefined ? priceData.usdPrice : priceData.price;
+                if (priceValue === undefined || priceValue === null) {
+                    throw new Error('Price field missing in Jupiter API response');
+                }
+                const price = parseFloat(priceValue);
+                if (isNaN(price) || price <= 0) {
+                    throw new Error(`Invalid price value: ${priceValue}`);
+                }
+                this.priceCache.push({ price, timestamp: Date.now() });
+                this.cleanCache();
+                console.log(` Current token price: $${price}`);
+                return price;
             }
-            console.error(' Failed to fetch token price from all endpoints. Last error:', lastError === null || lastError === void 0 ? void 0 : lastError.message);
-            // Return last known price if available
-            if (this.priceCache.length > 0) {
-                const lastPrice = this.priceCache[this.priceCache.length - 1].price;
-                console.warn(` Using cached price: $${lastPrice}`);
-                return lastPrice;
+            catch (error) {
+                console.error(' Failed to fetch token price:', error.message);
+                if (this.priceCache.length > 0) {
+                    const lastPrice = this.priceCache[this.priceCache.length - 1].price;
+                    console.warn(` Using cached price: $${lastPrice}`);
+                    return lastPrice;
+                }
+                throw error;
             }
-            throw new Error(`Unable to fetch token price from any endpoint: ${lastError === null || lastError === void 0 ? void 0 : lastError.message}`);
         });
     }
     /**

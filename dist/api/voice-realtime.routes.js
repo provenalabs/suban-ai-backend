@@ -13,33 +13,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const balance_tracker_service_1 = __importDefault(require("../services/solana/balance-tracker.service"));
-const price_oracle_service_1 = __importDefault(require("../services/solana/price-oracle.service"));
-const voice_service_1 = __importDefault(require("../services/voice.service"));
 const auth_middleware_1 = require("../middleware/auth.middleware");
 const rateLimit_middleware_1 = require("../middleware/rateLimit.middleware");
+const grok_voice_service_1 = __importDefault(require("../services/grok-voice.service"));
+const balance_tracker_service_1 = __importDefault(require("../services/solana/balance-tracker.service"));
+const price_oracle_service_1 = __importDefault(require("../services/solana/price-oracle.service"));
 const router = (0, express_1.Router)();
-// Max voice session duration: 3 minutes
-const MAX_SESSION_DURATION_MS = 180000;
-const ESTIMATED_VOICE_SESSION_COST_USD = 0.10; // Estimated cost per 3-minute session
 /**
- * POST /api/voice/session
+ * POST /api/voice/realtime/session
  * Create a new Grok Voice Agent session
- * All voice interactions use Grok Voice Agent WebSocket API
  */
 router.post('/session', rateLimit_middleware_1.voiceRateLimiter, auth_middleware_1.verifyWallet, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { walletAddress, userId, voice, model, systemInstructions, temperature } = req.body;
+        const { walletAddress, userId, voice, model, systemInstructions } = req.body;
         const userWallet = walletAddress || req.walletAddress;
         const userIdentifier = userId || userWallet;
-        if (!voice_service_1.default.isAvailable()) {
-            return res.status(503).json({
-                error: 'Voice service not configured',
-                message: 'Grok Voice Agent requires GROK_API_KEY to be set'
-            });
+        if (!grok_voice_service_1.default.isAvailable()) {
+            return res.status(503).json({ error: 'Grok Voice Agent service not configured' });
         }
-        // Estimate cost for voice session
-        const requiredTokens = price_oracle_service_1.default.calculateTokenBurn(ESTIMATED_VOICE_SESSION_COST_USD);
+        // Estimate cost for voice session (rough estimate)
+        const estimatedCost = 0.10; // $0.10 per session estimate
+        const requiredTokens = price_oracle_service_1.default.calculateTokenBurn(estimatedCost);
         // Check balance
         const hasSufficientBalance = yield balance_tracker_service_1.default.hasSufficientBalance(userWallet, requiredTokens);
         if (!hasSufficientBalance) {
@@ -48,22 +42,19 @@ router.post('/session', rateLimit_middleware_1.voiceRateLimiter, auth_middleware
                 error: 'Insufficient tokens',
                 required: requiredTokens,
                 available: balance.currentBalance,
-                costUsd: ESTIMATED_VOICE_SESSION_COST_USD,
+                costUsd: estimatedCost,
             });
         }
         // Create voice session
-        const session = yield voice_service_1.default.createSession({
+        const session = yield grok_voice_service_1.default.createSession({
             model: model || 'grok-4-1-fast-non-reasoning',
             voice: voice || 'Ara',
             systemInstructions: systemInstructions || '',
-            temperature: temperature || 0.7,
         });
         res.json({
             sessionId: session.sessionId,
-            message: 'Voice session created. Connect via WebSocket to /api/voice/ws/:sessionId',
-            wsUrl: `/api/voice/ws/${session.sessionId}`,
-            maxDuration: MAX_SESSION_DURATION_MS / 1000, // seconds
-            estimatedCost: ESTIMATED_VOICE_SESSION_COST_USD,
+            message: 'Voice session created. Connect via WebSocket to /api/voice/realtime/ws/:sessionId',
+            wsUrl: `/api/voice/realtime/ws/${session.sessionId}`,
         });
     }
     catch (error) {
@@ -72,18 +63,22 @@ router.post('/session', rateLimit_middleware_1.voiceRateLimiter, auth_middleware
     }
 }));
 /**
- * GET /api/voice/session/:sessionId
+ * GET /api/voice/realtime/session/:sessionId
  * Get session information
  */
 router.get('/session/:sessionId', auth_middleware_1.verifyWallet, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { sessionId } = req.params;
-        const sessionInfo = voice_service_1.default.getSessionInfo(sessionId);
-        if (!sessionInfo) {
+        const session = grok_voice_service_1.default.getSession(sessionId);
+        if (!session) {
             return res.status(404).json({ error: 'Session not found' });
         }
-        const isValid = voice_service_1.default.isSessionValid(sessionId);
-        res.json(Object.assign(Object.assign({}, sessionInfo), { isValid, maxDuration: MAX_SESSION_DURATION_MS / 1000, remainingTime: isValid ? (MAX_SESSION_DURATION_MS - sessionInfo.duration) / 1000 : 0 }));
+        res.json({
+            sessionId: session.sessionId,
+            isConnected: session.isConnected,
+            duration: session.duration,
+            startTime: session.startTime,
+        });
     }
     catch (error) {
         console.error('Get session error:', error);
@@ -91,43 +86,26 @@ router.get('/session/:sessionId', auth_middleware_1.verifyWallet, (req, res) => 
     }
 }));
 /**
- * DELETE /api/voice/session/:sessionId
+ * DELETE /api/voice/realtime/session/:sessionId
  * Close a voice session
  */
 router.delete('/session/:sessionId', auth_middleware_1.verifyWallet, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { sessionId } = req.params;
-        yield voice_service_1.default.closeSession(sessionId);
+        const session = grok_voice_service_1.default.getSession(sessionId);
+        if (!session) {
+            return res.status(404).json({ error: 'Session not found' });
+        }
+        yield session.close();
         res.json({
             message: 'Session closed',
             sessionId,
+            duration: session.duration,
         });
     }
     catch (error) {
         console.error('Close session error:', error);
         res.status(500).json({ error: 'Server error', details: error.message });
-    }
-}));
-/**
- * GET /api/voice/cost
- * Get estimated cost for a voice session
- */
-router.get('/cost', rateLimit_middleware_1.costCalculationRateLimiter, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const requiredTokens = price_oracle_service_1.default.calculateTokenBurn(ESTIMATED_VOICE_SESSION_COST_USD);
-        const tokenPrice = price_oracle_service_1.default.getTWAPPrice();
-        res.json({
-            costUsd: ESTIMATED_VOICE_SESSION_COST_USD,
-            costTokens: requiredTokens,
-            tokenPrice,
-            serviceAvailable: voice_service_1.default.isAvailable(),
-            maxSessionDuration: MAX_SESSION_DURATION_MS / 1000, // seconds
-            note: 'All voice interactions use Grok Voice Agent WebSocket API',
-        });
-    }
-    catch (error) {
-        console.error('Error calculating cost:', error);
-        res.status(500).json({ error: 'Failed to calculate cost' });
     }
 }));
 exports.default = router;
@@ -137,9 +115,9 @@ exports.default = router;
 // import expressWs from 'express-ws';
 // const { app } = expressWs(express());
 // 
-// app.ws('/api/voice/ws/:sessionId', async (ws, req) => {
+// app.ws('/api/voice/realtime/ws/:sessionId', async (ws, req) => {
 //     const { sessionId } = req.params;
-//     const session = voiceService.getSession(sessionId);
+//     const session = grokVoiceService.getSession(sessionId);
 //     
 //     if (!session) {
 //         ws.close(1008, 'Session not found');
@@ -153,10 +131,6 @@ exports.default = router;
 //     
 //     session.on('transcript', (text) => {
 //         ws.send(JSON.stringify({ type: 'transcript', text }));
-//     });
-//     
-//     session.on('response_done', () => {
-//         ws.send(JSON.stringify({ type: 'response_done' }));
 //     });
 //     
 //     ws.on('message', (message) => {

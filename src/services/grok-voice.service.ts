@@ -153,7 +153,7 @@ class GrokVoiceSessionImpl extends EventEmitter implements GrokVoiceSession {
                     }
                 });
 
-                this.ws.on('error', (error) => {
+                this.ws.on('error', (error: Error) => {
                     this.emit('error', error);
                     if (!this.isConnected) {
                         reject(error);

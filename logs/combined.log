@@ -576,3 +576,147 @@
 {"level":"info","message":"Solana services initialized successfully","requestId":"no-request-id","service":"justin-lee-ai-backend","timestamp":"2026-01-15 09:14:51"}
 {"error":"queryTxt ESERVFAIL cluster0.aleonke.mongodb.net","level":"error","message":"MongoDB Connection Error","requestId":"no-request-id","service":"justin-lee-ai-backend","timestamp":"2026-01-15 09:14:53"}
 {"error":"Operation `usagerecords.find()` buffering timed out after 10000ms","level":"error","message":"Automated settlement check failed","requestId":"no-request-id","service":"justin-lee-ai-backend","timestamp":"2026-01-15 09:20:01"}
+{"env":"development","level":"info","message":"Server started","port":"5000","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 06:40:14"}
+{"level":"info","message":"Initializing Solana services...","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 06:40:14"}
+{"error":"querySrv ECONNREFUSED _mongodb._tcp.cluster0.aleonke.mongodb.net","level":"error","message":"MongoDB Connection Error","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 06:40:14"}
+{"env":"development","level":"info","message":"Server started","port":"5000","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 06:40:22"}
+{"level":"info","message":"Initializing Solana services...","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 06:40:22"}
+{"error":"querySrv ECONNREFUSED _mongodb._tcp.cluster0.aleonke.mongodb.net","level":"error","message":"MongoDB Connection Error","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 06:40:22"}
+{"intervalMinutes":60,"level":"info","message":"Initializing automated settlement","requestId":"no-request-id","service":"suban-ai-backend","thresholdTokens":1000,"timestamp":"2026-01-20 06:40:24"}
+{"level":"info","message":"Automated settlement initialized","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 06:40:24"}
+{"level":"info","message":"Solana services initialized successfully","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 06:40:24"}
+{"env":"development","level":"info","message":"Server started","port":"5000","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 06:44:00"}
+{"level":"info","message":"Initializing Solana services...","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 06:44:00"}
+{"error":"querySrv ECONNREFUSED _mongodb._tcp.cluster0.aleonke.mongodb.net","level":"error","message":"MongoDB Connection Error","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 06:44:00"}
+{"intervalMinutes":60,"level":"info","message":"Initializing automated settlement","requestId":"no-request-id","service":"suban-ai-backend","thresholdTokens":1000,"timestamp":"2026-01-20 06:44:02"}
+{"level":"info","message":"Automated settlement initialized","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 06:44:02"}
+{"level":"info","message":"Solana services initialized successfully","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 06:44:02"}
+{"env":"development","level":"info","message":"Server started","port":"5000","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 06:45:35"}
+{"level":"info","message":"Initializing Solana services...","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 06:45:35"}
+{"error":"querySrv ECONNREFUSED _mongodb._tcp.cluster0.aleonke.mongodb.net","level":"error","message":"MongoDB Connection Error","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 06:45:36"}
+{"intervalMinutes":60,"level":"info","message":"Initializing automated settlement","requestId":"no-request-id","service":"suban-ai-backend","thresholdTokens":1000,"timestamp":"2026-01-20 06:45:38"}
+{"level":"info","message":"Automated settlement initialized","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 06:45:38"}
+{"level":"info","message":"Solana services initialized successfully","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 06:45:38"}
+{"error":"Operation `usagerecords.find()` buffering timed out after 10000ms","level":"error","message":"Automated settlement check failed","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 06:50:48"}
+{"error":"Operation `usagerecords.find()` buffering timed out after 10000ms","level":"error","message":"Automated settlement check failed","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 06:55:48"}
+{"env":"development","level":"info","message":"Server started","port":"5000","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 06:58:59"}
+{"level":"info","message":"Initializing Solana services...","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 06:58:59"}
+{"error":"querySrv ECONNREFUSED _mongodb._tcp.cluster0.aleonke.mongodb.net","level":"error","message":"MongoDB Connection Error","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 06:58:59"}
+{"intervalMinutes":60,"level":"info","message":"Initializing automated settlement","requestId":"no-request-id","service":"suban-ai-backend","thresholdTokens":1000,"timestamp":"2026-01-20 06:59:02"}
+{"level":"info","message":"Automated settlement initialized","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 06:59:02"}
+{"level":"info","message":"Solana services initialized successfully","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 06:59:02"}
+{"error":"Operation `usagerecords.find()` buffering timed out after 10000ms","level":"error","message":"Automated settlement check failed","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:04:12"}
+{"env":"development","level":"info","message":"Server started","port":"5000","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:04:59"}
+{"level":"info","message":"Initializing Solana services...","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:04:59"}
+{"error":"querySrv ECONNREFUSED _mongodb._tcp.cluster0.aleonke.mongodb.net","level":"error","message":"MongoDB Connection Error","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:05:00"}
+{"intervalMinutes":60,"level":"info","message":"Initializing automated settlement","requestId":"no-request-id","service":"suban-ai-backend","thresholdTokens":1000,"timestamp":"2026-01-20 07:05:01"}
+{"level":"info","message":"Automated settlement initialized","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:05:01"}
+{"level":"info","message":"Solana services initialized successfully","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:05:01"}
+{"env":"development","level":"info","message":"Server started","port":"5000","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:06:28"}
+{"level":"info","message":"Initializing Solana services...","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:06:28"}
+{"error":"querySrv ECONNREFUSED _mongodb._tcp.cluster0.aleonke.mongodb.net","level":"error","message":"MongoDB Connection Error","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:06:28"}
+{"intervalMinutes":60,"level":"info","message":"Initializing automated settlement","requestId":"no-request-id","service":"suban-ai-backend","thresholdTokens":1000,"timestamp":"2026-01-20 07:06:30"}
+{"level":"info","message":"Automated settlement initialized","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:06:30"}
+{"level":"info","message":"Solana services initialized successfully","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:06:30"}
+{"env":"development","level":"info","message":"Server started","port":"5000","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:15:17"}
+{"level":"info","message":"Initializing Solana services...","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:15:17"}
+{"error":"querySrv ECONNREFUSED _mongodb._tcp.cluster0.aleonke.mongodb.net","level":"error","message":"MongoDB Connection Error","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:15:17"}
+{"intervalMinutes":60,"level":"info","message":"Initializing automated settlement","requestId":"no-request-id","service":"suban-ai-backend","thresholdTokens":1000,"timestamp":"2026-01-20 07:15:33"}
+{"level":"info","message":"Automated settlement initialized","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:15:33"}
+{"level":"info","message":"Solana services initialized successfully","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:15:33"}
+{"env":"development","level":"info","message":"Server started","port":"5000","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:16:13"}
+{"level":"info","message":"Initializing Solana services...","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:16:13"}
+{"error":"querySrv ECONNREFUSED _mongodb._tcp.cluster0.aleonke.mongodb.net","level":"error","message":"MongoDB Connection Error","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:16:13"}
+{"intervalMinutes":60,"level":"info","message":"Initializing automated settlement","requestId":"no-request-id","service":"suban-ai-backend","thresholdTokens":1000,"timestamp":"2026-01-20 07:16:15"}
+{"level":"info","message":"Automated settlement initialized","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:16:15"}
+{"level":"info","message":"Solana services initialized successfully","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:16:15"}
+{"env":"development","level":"info","message":"Server started","port":"5000","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:17:46"}
+{"level":"info","message":"Initializing Solana services...","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:17:46"}
+{"error":"querySrv ECONNREFUSED _mongodb._tcp.cluster0.aleonke.mongodb.net","level":"error","message":"MongoDB Connection Error","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:17:46"}
+{"intervalMinutes":60,"level":"info","message":"Initializing automated settlement","requestId":"no-request-id","service":"suban-ai-backend","thresholdTokens":1000,"timestamp":"2026-01-20 07:17:47"}
+{"level":"info","message":"Automated settlement initialized","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:17:47"}
+{"level":"info","message":"Solana services initialized successfully","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:17:47"}
+{"env":"development","level":"info","message":"Server started","port":"5000","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:20:00"}
+{"level":"info","message":"Initializing Solana services...","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:20:00"}
+{"error":"querySrv ECONNREFUSED _mongodb._tcp.cluster0.aleonke.mongodb.net","level":"error","message":"MongoDB Connection Error","requestId":"no-request-id","service":"suban-ai-backend","stack":"Error: querySrv ECONNREFUSED _mongodb._tcp.cluster0.aleonke.mongodb.net\n    at QueryReqWrap.onresolve [as oncomplete] (node:internal/dns/promises:294:17)","timestamp":"2026-01-20 07:20:00"}
+{"intervalMinutes":60,"level":"info","message":"Initializing automated settlement","requestId":"no-request-id","service":"suban-ai-backend","thresholdTokens":1000,"timestamp":"2026-01-20 07:20:02"}
+{"level":"info","message":"Automated settlement initialized","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:20:02"}
+{"level":"info","message":"Solana services initialized successfully","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:20:02"}
+{"env":"development","level":"info","message":"Server started","port":"5000","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:20:18"}
+{"level":"info","message":"Initializing Solana services...","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:20:18"}
+{"level":"warn","message":"MongoDB Disconnected","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:20:18"}
+{"error":"querySrv ECONNREFUSED _mongodb._tcp.cluster0.aleonke.mongodb.net","level":"error","message":"MongoDB Initial Connection Error","note":"Connection will retry automatically. If this persists, check your MONGODB_URI and network connectivity.","requestId":"no-request-id","service":"suban-ai-backend","stack":"Error: querySrv ECONNREFUSED _mongodb._tcp.cluster0.aleonke.mongodb.net\n    at QueryReqWrap.onresolve [as oncomplete] (node:internal/dns/promises:294:17)","timestamp":"2026-01-20 07:20:18"}
+{"error":"querySrv ECONNREFUSED _mongodb._tcp.cluster0.aleonke.mongodb.net","level":"error","message":"MongoDB Connection Error","requestId":"no-request-id","service":"suban-ai-backend","stack":"Error: querySrv ECONNREFUSED _mongodb._tcp.cluster0.aleonke.mongodb.net\n    at QueryReqWrap.onresolve [as oncomplete] (node:internal/dns/promises:294:17)","timestamp":"2026-01-20 07:20:18"}
+{"intervalMinutes":60,"level":"info","message":"Initializing automated settlement","requestId":"no-request-id","service":"suban-ai-backend","thresholdTokens":1000,"timestamp":"2026-01-20 07:20:19"}
+{"level":"info","message":"Automated settlement initialized","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:20:19"}
+{"level":"info","message":"Solana services initialized successfully","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:20:19"}
+{"env":"development","level":"info","message":"Server started","port":"5000","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:20:41"}
+{"level":"info","message":"Initializing Solana services...","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:20:41"}
+{"level":"warn","message":"MongoDB Disconnected","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:20:42"}
+{"error":"querySrv ECONNREFUSED _mongodb._tcp.cluster0.aleonke.mongodb.net","level":"error","message":"MongoDB Initial Connection Error","note":"Connection will retry automatically. If this persists, check your MONGODB_URI and network connectivity.","requestId":"no-request-id","service":"suban-ai-backend","stack":"Error: querySrv ECONNREFUSED _mongodb._tcp.cluster0.aleonke.mongodb.net\n    at QueryReqWrap.onresolve [as oncomplete] (node:internal/dns/promises:294:17)","timestamp":"2026-01-20 07:20:42"}
+{"error":"querySrv ECONNREFUSED _mongodb._tcp.cluster0.aleonke.mongodb.net","level":"error","message":"MongoDB Connection Error","requestId":"no-request-id","service":"suban-ai-backend","stack":"Error: querySrv ECONNREFUSED _mongodb._tcp.cluster0.aleonke.mongodb.net\n    at QueryReqWrap.onresolve [as oncomplete] (node:internal/dns/promises:294:17)","timestamp":"2026-01-20 07:20:42"}
+{"intervalMinutes":60,"level":"info","message":"Initializing automated settlement","requestId":"no-request-id","service":"suban-ai-backend","thresholdTokens":1000,"timestamp":"2026-01-20 07:20:43"}
+{"level":"info","message":"Automated settlement initialized","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:20:43"}
+{"level":"info","message":"Solana services initialized successfully","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:20:43"}
+{"level":"info","message":"API Request","method":"GET","path":"/","requestId":"282f7882-3e1c-4bcc-bf81-1eadc8330da7","service":"suban-ai-backend","timestamp":"2026-01-20 07:20:46"}
+{"duration":"5ms","level":"info","message":"API Response","requestId":"282f7882-3e1c-4bcc-bf81-1eadc8330da7","service":"suban-ai-backend","statusCode":200,"timestamp":"2026-01-20 07:20:46"}
+{"level":"info","message":"API Request","method":"GET","path":"/favicon.ico","requestId":"d1a2124e-581f-490b-aec4-de93a9979ad2","service":"suban-ai-backend","timestamp":"2026-01-20 07:20:46"}
+{"duration":"3ms","level":"info","message":"API Response","requestId":"d1a2124e-581f-490b-aec4-de93a9979ad2","service":"suban-ai-backend","statusCode":404,"timestamp":"2026-01-20 07:20:46"}
+{"level":"info","message":"API Request","method":"GET","path":"/api/token/balance/22hrGCE1Q2khNo8G2B2hhfnaAxZiwf6AVtoDnRVD2sv8","requestId":"9a8d7490-df68-4a09-9ca6-8ee3301c5385","service":"suban-ai-backend","timestamp":"2026-01-20 07:24:59"}
+{"level":"info","message":"API Request","method":"GET","path":"/api/token/price","requestId":"255f93ac-9c2f-4850-8482-29cf8db7fd1d","service":"suban-ai-backend","timestamp":"2026-01-20 07:24:59"}
+{"duration":"3ms","level":"info","message":"API Response","requestId":"255f93ac-9c2f-4850-8482-29cf8db7fd1d","service":"suban-ai-backend","statusCode":200,"timestamp":"2026-01-20 07:24:59"}
+{"level":"info","message":"API Request","method":"GET","path":"/api/token/price","requestId":"d9b54ce2-f68b-4511-8fc0-651995ccd6c9","service":"suban-ai-backend","timestamp":"2026-01-20 07:24:59"}
+{"duration":"1ms","level":"info","message":"API Response","requestId":"d9b54ce2-f68b-4511-8fc0-651995ccd6c9","service":"suban-ai-backend","statusCode":200,"timestamp":"2026-01-20 07:24:59"}
+{"duration":"10015ms","level":"info","message":"API Response","requestId":"9a8d7490-df68-4a09-9ca6-8ee3301c5385","service":"suban-ai-backend","statusCode":500,"timestamp":"2026-01-20 07:25:09"}
+{"level":"info","message":"API Request","method":"GET","path":"/api/token/balance/22hrGCE1Q2khNo8G2B2hhfnaAxZiwf6AVtoDnRVD2sv8","requestId":"cea4db0e-37c3-448d-a2b0-949b53157dd2","service":"suban-ai-backend","timestamp":"2026-01-20 07:25:09"}
+{"duration":"10005ms","level":"info","message":"API Response","requestId":"cea4db0e-37c3-448d-a2b0-949b53157dd2","service":"suban-ai-backend","statusCode":500,"timestamp":"2026-01-20 07:25:19"}
+{"level":"info","message":"API Request","method":"GET","path":"/api/token/balance/22hrGCE1Q2khNo8G2B2hhfnaAxZiwf6AVtoDnRVD2sv8","requestId":"664e4f77-e84d-4e86-883b-520792fa3403","service":"suban-ai-backend","timestamp":"2026-01-20 07:25:29"}
+{"level":"info","message":"API Request","method":"GET","path":"/api/token/price","requestId":"e195991e-05fb-4606-bdf8-9de45f9c32a1","service":"suban-ai-backend","timestamp":"2026-01-20 07:25:29"}
+{"duration":"1ms","level":"info","message":"API Response","requestId":"e195991e-05fb-4606-bdf8-9de45f9c32a1","service":"suban-ai-backend","statusCode":200,"timestamp":"2026-01-20 07:25:29"}
+{"duration":"10003ms","level":"info","message":"API Response","requestId":"664e4f77-e84d-4e86-883b-520792fa3403","service":"suban-ai-backend","statusCode":500,"timestamp":"2026-01-20 07:25:39"}
+{"error":"Operation `usagerecords.find()` buffering timed out after 10000ms","level":"error","message":"Automated settlement check failed","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:25:53"}
+{"level":"info","message":"API Request","method":"GET","path":"/api/token/balance/22hrGCE1Q2khNo8G2B2hhfnaAxZiwf6AVtoDnRVD2sv8","requestId":"85d0b16e-fd43-4db9-ae7b-0b1cf5c7bd51","service":"suban-ai-backend","timestamp":"2026-01-20 07:25:59"}
+{"level":"info","message":"API Request","method":"GET","path":"/api/token/price","requestId":"11768252-4fa1-455c-9293-be486c6c2219","service":"suban-ai-backend","timestamp":"2026-01-20 07:25:59"}
+{"duration":"431ms","level":"info","message":"API Response","requestId":"11768252-4fa1-455c-9293-be486c6c2219","service":"suban-ai-backend","statusCode":200,"timestamp":"2026-01-20 07:25:59"}
+{"duration":"10004ms","level":"info","message":"API Response","requestId":"85d0b16e-fd43-4db9-ae7b-0b1cf5c7bd51","service":"suban-ai-backend","statusCode":500,"timestamp":"2026-01-20 07:26:09"}
+{"level":"info","message":"API Request","method":"GET","path":"/api/token/balance/22hrGCE1Q2khNo8G2B2hhfnaAxZiwf6AVtoDnRVD2sv8","requestId":"3aaa1270-2faa-48c7-af11-03b8174fc41d","service":"suban-ai-backend","timestamp":"2026-01-20 07:26:29"}
+{"level":"info","message":"API Request","method":"GET","path":"/api/token/price","requestId":"5a4d682c-b72b-41d1-82ec-02eb5c2ddd41","service":"suban-ai-backend","timestamp":"2026-01-20 07:26:29"}
+{"duration":"1ms","level":"info","message":"API Response","requestId":"5a4d682c-b72b-41d1-82ec-02eb5c2ddd41","service":"suban-ai-backend","statusCode":200,"timestamp":"2026-01-20 07:26:29"}
+{"duration":"10003ms","level":"info","message":"API Response","requestId":"3aaa1270-2faa-48c7-af11-03b8174fc41d","service":"suban-ai-backend","statusCode":500,"timestamp":"2026-01-20 07:26:39"}
+{"level":"info","message":"API Request","method":"GET","path":"/api/token/balance/22hrGCE1Q2khNo8G2B2hhfnaAxZiwf6AVtoDnRVD2sv8","requestId":"1ad26a18-3460-407f-b5f5-338b317e1188","service":"suban-ai-backend","timestamp":"2026-01-20 07:26:59"}
+{"level":"info","message":"API Request","method":"GET","path":"/api/token/price","requestId":"b224c807-061c-455a-bad0-f76090a00f3d","service":"suban-ai-backend","timestamp":"2026-01-20 07:26:59"}
+{"duration":"2ms","level":"info","message":"API Response","requestId":"b224c807-061c-455a-bad0-f76090a00f3d","service":"suban-ai-backend","statusCode":200,"timestamp":"2026-01-20 07:26:59"}
+{"duration":"10003ms","level":"info","message":"API Response","requestId":"1ad26a18-3460-407f-b5f5-338b317e1188","service":"suban-ai-backend","statusCode":500,"timestamp":"2026-01-20 07:27:09"}
+{"level":"info","message":"API Request","method":"GET","path":"/api/token/balance/22hrGCE1Q2khNo8G2B2hhfnaAxZiwf6AVtoDnRVD2sv8","requestId":"6e5ad3cf-b425-44fd-9eb6-df8d3b180a63","service":"suban-ai-backend","timestamp":"2026-01-20 07:27:29"}
+{"level":"info","message":"API Request","method":"GET","path":"/api/token/price","requestId":"924adf0b-2f57-423e-b1ea-5bfd9bcbe026","service":"suban-ai-backend","timestamp":"2026-01-20 07:27:29"}
+{"duration":"1ms","level":"info","message":"API Response","requestId":"924adf0b-2f57-423e-b1ea-5bfd9bcbe026","service":"suban-ai-backend","statusCode":200,"timestamp":"2026-01-20 07:27:29"}
+{"duration":"10004ms","level":"info","message":"API Response","requestId":"6e5ad3cf-b425-44fd-9eb6-df8d3b180a63","service":"suban-ai-backend","statusCode":500,"timestamp":"2026-01-20 07:27:39"}
+{"level":"info","message":"API Request","method":"GET","path":"/api/token/balance/22hrGCE1Q2khNo8G2B2hhfnaAxZiwf6AVtoDnRVD2sv8","requestId":"29b39427-0bc0-4d7d-9f2d-69b0a3d6c4b2","service":"suban-ai-backend","timestamp":"2026-01-20 07:27:59"}
+{"level":"info","message":"API Request","method":"GET","path":"/api/token/price","requestId":"8a98c1fa-0c5d-4173-8950-def22d813663","service":"suban-ai-backend","timestamp":"2026-01-20 07:27:59"}
+{"duration":"908ms","level":"info","message":"API Response","requestId":"8a98c1fa-0c5d-4173-8950-def22d813663","service":"suban-ai-backend","statusCode":200,"timestamp":"2026-01-20 07:28:00"}
+{"duration":"10003ms","level":"info","message":"API Response","requestId":"29b39427-0bc0-4d7d-9f2d-69b0a3d6c4b2","service":"suban-ai-backend","statusCode":500,"timestamp":"2026-01-20 07:28:09"}
+{"level":"info","message":"API Request","method":"GET","path":"/api/token/balance/22hrGCE1Q2khNo8G2B2hhfnaAxZiwf6AVtoDnRVD2sv8","requestId":"4f67c15b-d50f-4005-8699-44027889d8e4","service":"suban-ai-backend","timestamp":"2026-01-20 07:28:49"}
+{"level":"info","message":"API Request","method":"GET","path":"/api/token/price","requestId":"48582495-69fe-45e4-bfc8-192d61cbdd31","service":"suban-ai-backend","timestamp":"2026-01-20 07:28:49"}
+{"duration":"3ms","level":"info","message":"API Response","requestId":"48582495-69fe-45e4-bfc8-192d61cbdd31","service":"suban-ai-backend","statusCode":200,"timestamp":"2026-01-20 07:28:49"}
+{"duration":"10006ms","level":"info","message":"API Response","requestId":"4f67c15b-d50f-4005-8699-44027889d8e4","service":"suban-ai-backend","statusCode":500,"timestamp":"2026-01-20 07:28:59"}
+{"level":"info","message":"MongoDB connection closed due to application termination","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:29:16"}
+{"env":"development","level":"info","message":"Server started","port":"5000","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:29:28"}
+{"level":"info","message":"Initializing Solana services...","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:29:28"}
+{"level":"warn","message":"MongoDB Disconnected","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:29:28"}
+{"error":"querySrv ECONNREFUSED _mongodb._tcp.cluster0.aleonke.mongodb.net","level":"error","message":"MongoDB Initial Connection Error","note":"Connection will retry automatically. If this persists, check your MONGODB_URI and network connectivity.","requestId":"no-request-id","service":"suban-ai-backend","stack":"Error: querySrv ECONNREFUSED _mongodb._tcp.cluster0.aleonke.mongodb.net\n    at QueryReqWrap.onresolve [as oncomplete] (node:internal/dns/promises:294:17)","timestamp":"2026-01-20 07:29:28"}
+{"error":"querySrv ECONNREFUSED _mongodb._tcp.cluster0.aleonke.mongodb.net","level":"error","message":"MongoDB Connection Error","requestId":"no-request-id","service":"suban-ai-backend","stack":"Error: querySrv ECONNREFUSED _mongodb._tcp.cluster0.aleonke.mongodb.net\n    at QueryReqWrap.onresolve [as oncomplete] (node:internal/dns/promises:294:17)","timestamp":"2026-01-20 07:29:28"}
+{"intervalMinutes":60,"level":"info","message":"Initializing automated settlement","requestId":"no-request-id","service":"suban-ai-backend","thresholdTokens":1000,"timestamp":"2026-01-20 07:29:29"}
+{"level":"info","message":"Automated settlement initialized","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:29:29"}
+{"level":"info","message":"Solana services initialized successfully","requestId":"no-request-id","service":"suban-ai-backend","timestamp":"2026-01-20 07:29:29"}
+{"level":"info","message":"API Request","method":"GET","path":"/api/token/balance/22hrGCE1Q2khNo8G2B2hhfnaAxZiwf6AVtoDnRVD2sv8","requestId":"ed8e830e-3992-4c37-818c-fefb824e260d","service":"suban-ai-backend","timestamp":"2026-01-20 07:29:40"}
+{"level":"info","message":"API Request","method":"GET","path":"/api/token/price","requestId":"0a9efaba-523e-403d-8a1d-7898ef48ddf7","service":"suban-ai-backend","timestamp":"2026-01-20 07:29:40"}
+{"duration":"3ms","level":"info","message":"API Response","requestId":"0a9efaba-523e-403d-8a1d-7898ef48ddf7","service":"suban-ai-backend","statusCode":200,"timestamp":"2026-01-20 07:29:40"}
+{"duration":"10017ms","level":"info","message":"API Response","requestId":"ed8e830e-3992-4c37-818c-fefb824e260d","service":"suban-ai-backend","statusCode":500,"timestamp":"2026-01-20 07:29:50"}
+{"level":"info","message":"API Request","method":"GET","path":"/api/token/balance/22hrGCE1Q2khNo8G2B2hhfnaAxZiwf6AVtoDnRVD2sv8","requestId":"82ce7330-a0e4-4863-a759-b38edb5e1ef3","service":"suban-ai-backend","timestamp":"2026-01-20 07:29:59"}
+{"level":"info","message":"API Request","method":"GET","path":"/api/token/price","requestId":"fc4a0488-62a0-403f-97f1-33b2fd792dff","service":"suban-ai-backend","timestamp":"2026-01-20 07:29:59"}
+{"duration":"1ms","level":"info","message":"API Response","requestId":"fc4a0488-62a0-403f-97f1-33b2fd792dff","service":"suban-ai-backend","statusCode":200,"timestamp":"2026-01-20 07:29:59"}
+{"duration":"10003ms","level":"info","message":"API Response","requestId":"82ce7330-a0e4-4863-a759-b38edb5e1ef3","service":"suban-ai-backend","statusCode":500,"timestamp":"2026-01-20 07:30:09"}
+{"level":"info","message":"API Request","method":"GET","path":"/api/token/balance/22hrGCE1Q2khNo8G2B2hhfnaAxZiwf6AVtoDnRVD2sv8","requestId":"3e576f4c-0d30-4034-a914-c9bcf4f511a1","service":"suban-ai-backend","timestamp":"2026-01-20 07:30:29"}
+{"level":"info","message":"API Request","method":"GET","path":"/api/token/price","requestId":"e0f9b546-092b-41d2-90d2-60339108d73b","service":"suban-ai-backend","timestamp":"2026-01-20 07:30:29"}
+{"duration":"2ms","level":"info","message":"API Response","requestId":"e0f9b546-092b-41d2-90d2-60339108d73b","service":"suban-ai-backend","statusCode":200,"timestamp":"2026-01-20 07:30:29"}
+{"duration":"10004ms","level":"info","message":"API Response","requestId":"3e576f4c-0d30-4034-a914-c9bcf4f511a1","service":"suban-ai-backend","statusCode":500,"timestamp":"2026-01-20 07:30:39"}

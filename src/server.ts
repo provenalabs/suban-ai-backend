@@ -45,15 +45,58 @@ if (process.env.USE_MORGAN !== 'false') {
 }
 
 // Database Connection
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/justin_lee_ai';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/suban_ai';
 
-mongoose.connect(MONGODB_URI)
-    .then(() => logger.info('MongoDB Connected', { uri: MONGODB_URI.replace(/\/\/.*@/, '//***@') }))
-    .catch((err) => logger.error('MongoDB Connection Error', { error: err.message }));
+// MongoDB connection options for Atlas
+const mongooseOptions = {
+    serverSelectionTimeoutMS: 30000, // 30 seconds timeout for server selection
+    socketTimeoutMS: 45000, // 45 seconds timeout for socket operations
+    connectTimeoutMS: 30000, // 30 seconds timeout for initial connection
+    retryWrites: true, // Enable retryable writes
+    retryReads: true, // Enable retryable reads
+    directConnection: false, // Allow SRV connection (required for Atlas)
+};
+
+// MongoDB connection event handlers for better debugging
+mongoose.connection.on('connected', () => {
+    logger.info('MongoDB Connected', { uri: MONGODB_URI.replace(/\/\/.*@/, '//***@') });
+});
+
+mongoose.connection.on('error', (err) => {
+    logger.error('MongoDB Connection Error', { 
+        error: err.message,
+        stack: err.stack 
+    });
+});
+
+mongoose.connection.on('disconnected', () => {
+    logger.warn('MongoDB Disconnected');
+});
+
+mongoose.connection.on('reconnected', () => {
+    logger.info('MongoDB Reconnected');
+});
+
+// Handle process termination
+process.on('SIGINT', async () => {
+    await mongoose.connection.close();
+    logger.info('MongoDB connection closed due to application termination');
+    process.exit(0);
+});
+
+mongoose.connect(MONGODB_URI, mongooseOptions)
+    .catch((err) => {
+        logger.error('MongoDB Initial Connection Error', { 
+            error: err.message,
+            stack: err.stack,
+            note: 'Connection will retry automatically. If this persists, check your MONGODB_URI and network connectivity.'
+        });
+        // Don't exit the process - allow server to continue (might be network issue)
+    });
 
 // Routes (Placeholders)
 app.get('/', (req, res) => {
-    res.send('AI Justin Lee API is running');
+    res.send('AI Suban API is running');
 });
 
 // Import Routes

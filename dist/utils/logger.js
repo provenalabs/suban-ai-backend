@@ -41,7 +41,7 @@ const requestIdFormat = winston_1.default.format((info) => {
 const logger = winston_1.default.createLogger({
     level: process.env.LOG_LEVEL || 'info',
     format: winston_1.default.format.combine(requestIdFormat(), winston_1.default.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }), winston_1.default.format.errors({ stack: true }), winston_1.default.format.splat(), winston_1.default.format.json()),
-    defaultMeta: { service: 'justin-lee-ai-backend' },
+    defaultMeta: { service: 'suban-ai-backend' },
     transports: [
         // Write all logs to console
         new winston_1.default.transports.Console({

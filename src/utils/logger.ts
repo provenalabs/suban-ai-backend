@@ -24,7 +24,7 @@ const logger = winston.createLogger({
         winston.format.splat(),
         winston.format.json()
     ),
-    defaultMeta: { service: 'justin-lee-ai-backend' },
+    defaultMeta: { service: 'suban-ai-backend' },
     transports: [
         // Write all logs to console
         new winston.transports.Console({

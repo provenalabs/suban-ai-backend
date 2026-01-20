@@ -12,14 +12,14 @@ async function testDeepSeek() {
     
     try {
         console.log('Using "cheap" tier (should be DeepSeek)...');
-        const response1 = await llmService.generateResponse('Hello! Are you running on DeepSeek?', 'cheap');
+        const response1 = await llmService.generateResponse('Hello! Are you running on DeepSeek?', { userTier: 'free' });
         console.log('Response:', response1.content);
         console.log('Provider:', response1.provider);
         console.log('Model:', response1.model);
         console.log('-----------------------------------');
 
         console.log('Using "expensive" tier (should fallback to DeepSeek)...');
-        const response2 = await llmService.generateResponse('Tell me about Solana briefly.', 'expensive');
+        const response2 = await llmService.generateResponse('Tell me about Solana briefly.', { userTier: 'paid' });
         console.log('Response:', response2.content);
         console.log('Provider:', response2.provider);
         console.log('Model:', response2.model);

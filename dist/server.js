@@ -82,13 +82,13 @@ if (process.env.USE_MORGAN !== 'false') {
     app.use((0, morgan_1.default)('dev'));
 }
 // Database Connection
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/justin_lee_ai';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/suban_ai';
 mongoose_1.default.connect(MONGODB_URI)
     .then(() => logger_1.default.info('MongoDB Connected', { uri: MONGODB_URI.replace(/\/\/.*@/, '//***@') }))
     .catch((err) => logger_1.default.error('MongoDB Connection Error', { error: err.message }));
 // Routes (Placeholders)
 app.get('/', (req, res) => {
-    res.send('AI Justin Lee API is running');
+    res.send('AI Suban API is running');
 });
 // Import Routes
 const auth_routes_1 = __importDefault(require("./api/auth.routes"));

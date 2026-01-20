@@ -1,4 +1,4 @@
-# AI Justin Lee - Solana Token-Gated AI Platform
+# AI Suban - Solana Token-Gated AI Platform
 
 A Web3-native AI platform where users pay for AI services using a Solana SPL token. Features dynamic USD-based pricing, 50/50 burn/treasury tokenomics, and multi-wallet support.
 
@@ -44,7 +44,7 @@ A Web3-native AI platform where users pay for AI services using a Solana SPL tok
 1. **Clone the repository**
 ```bash
 git clone <your-repo>
-cd "Justin Lee Ai"
+cd "Suban AI"
 ```
 
 2. **Install dependencies**
@@ -65,7 +65,7 @@ Backend (`.env`):
 # Server Configuration
 PORT=5000
 NODE_ENV=development
-MONGODB_URI=mongodb://localhost:27017/justin_lee_ai
+MONGODB_URI=mongodb://localhost:27017/suban_ai
 
 # Solana Configuration
 SOLANA_RPC_URL=https://api.mainnet-beta.solana.com
