@@ -1,6 +1,19 @@
-import { TokenBalance, ITokenBalance } from '../../models/TokenBalance';
+import mongoose from 'mongoose';
+import { TokenBalance, ITokenBalance, ITransaction } from '../../models/TokenBalance';
 import { UsageRecord } from '../../models/UsageRecord';
 import priceOracle from './price-oracle.service';
+
+/**
+ * Plain balance data type (without Mongoose Document methods)
+ */
+type TokenBalanceData = {
+  walletAddress: string;
+  depositedAmount: number;
+  consumedAmount: number;
+  currentBalance: number;
+  lastUpdated: Date;
+  transactions: ITransaction[];
+};
 
 /**
  * Balance Tracker Service
@@ -8,24 +21,60 @@ import priceOracle from './price-oracle.service';
  */
 class BalanceTrackerService {
   /**
+   * Check if MongoDB is connected
+   */
+  private isMongoConnected(): boolean {
+    return mongoose.connection.readyState === 1; // 1 = connected
+  }
+
+  /**
+   * Get default balance object (when MongoDB is not available)
+   */
+  private getDefaultBalance(walletAddress: string): TokenBalanceData {
+    return {
+      walletAddress,
+      depositedAmount: 0,
+      consumedAmount: 0,
+      currentBalance: 0,
+      transactions: [],
+      lastUpdated: new Date(),
+    };
+  }
+
+  /**
    * Get user balance
    */
-  public async getBalance(walletAddress: string): Promise<ITokenBalance> {
-    let balance = await TokenBalance.findOne({ walletAddress });
-
-    if (!balance) {
-      // Create new balance entry
-      balance = new TokenBalance({
-        walletAddress,
-        depositedAmount: 0,
-        consumedAmount: 0,
-        currentBalance: 0,
-        transactions: [],
-      });
-      await balance.save();
+  public async getBalance(walletAddress: string): Promise<ITokenBalance | TokenBalanceData> {
+    // Check if MongoDB is connected
+    if (!this.isMongoConnected()) {
+      console.warn('MongoDB not connected, returning default balance');
+      return this.getDefaultBalance(walletAddress);
     }
 
-    return balance;
+    try {
+      let balance = await TokenBalance.findOne({ walletAddress });
+
+      if (!balance) {
+        // Create new balance entry
+        balance = new TokenBalance({
+          walletAddress,
+          depositedAmount: 0,
+          consumedAmount: 0,
+          currentBalance: 0,
+          transactions: [],
+        });
+        await balance.save();
+      }
+
+      return balance;
+    } catch (error: any) {
+      // If MongoDB operation fails, return default balance
+      if (error.name === 'MongooseError' || error.message?.includes('buffering timed out')) {
+        console.warn('MongoDB operation failed, returning default balance:', error.message);
+        return this.getDefaultBalance(walletAddress);
+      }
+      throw error;
+    }
   }
 
   /**
@@ -36,7 +85,16 @@ class BalanceTrackerService {
     amount: number,
     txHash: string
   ): Promise<ITokenBalance> {
+    if (!this.isMongoConnected()) {
+      throw new Error('MongoDB not connected. Cannot record deposit.');
+    }
+
     const balance = await this.getBalance(walletAddress);
+    
+    // Ensure we have a Mongoose document, not a plain object
+    if (!(balance instanceof TokenBalance)) {
+      throw new Error('MongoDB not connected. Cannot record deposit.');
+    }
 
     balance.depositedAmount += amount;
     balance.currentBalance += amount;
@@ -61,7 +119,16 @@ class BalanceTrackerService {
     requestType: 'chat' | 'voice',
     usdCost: number
   ): Promise<ITokenBalance> {
+    if (!this.isMongoConnected()) {
+      throw new Error('MongoDB not connected. Cannot deduct tokens.');
+    }
+
     const balance = await this.getBalance(walletAddress);
+    
+    // Ensure we have a Mongoose document, not a plain object
+    if (!(balance instanceof TokenBalance)) {
+      throw new Error('MongoDB not connected. Cannot deduct tokens.');
+    }
 
     if (balance.currentBalance < amount) {
       throw new Error('Insufficient token balance');
@@ -114,12 +181,25 @@ class BalanceTrackerService {
     walletAddress: string,
     limit: number = 50
   ): Promise<any[]> {
-    const records = await UsageRecord.find({ walletAddress })
-      .sort({ timestamp: -1 })
-      .limit(limit)
-      .lean();
+    if (!this.isMongoConnected()) {
+      console.warn('MongoDB not connected, returning empty usage history');
+      return [];
+    }
 
-    return records;
+    try {
+      const records = await UsageRecord.find({ walletAddress })
+        .sort({ timestamp: -1 })
+        .limit(limit)
+        .lean();
+
+      return records;
+    } catch (error: any) {
+      if (error.name === 'MongooseError' || error.message?.includes('buffering timed out')) {
+        console.warn('MongoDB operation failed, returning empty usage history:', error.message);
+        return [];
+      }
+      throw error;
+    }
   }
 
   /**
@@ -130,18 +210,8 @@ class BalanceTrackerService {
     totalConsumed: number;
     totalUsers: number;
   }> {
-    const stats = await TokenBalance.aggregate([
-      {
-        $group: {
-          _id: null,
-          totalDeposited: { $sum: '$depositedAmount' },
-          totalConsumed: { $sum: '$consumedAmount' },
-          totalUsers: { $sum: 1 },
-        },
-      },
-    ]);
-
-    if (stats.length === 0) {
+    if (!this.isMongoConnected()) {
+      console.warn('MongoDB not connected, returning default stats');
       return {
         totalDeposited: 0,
         totalConsumed: 0,
@@ -149,23 +219,71 @@ class BalanceTrackerService {
       };
     }
 
-    return stats[0];
+    try {
+      const stats = await TokenBalance.aggregate([
+        {
+          $group: {
+            _id: null,
+            totalDeposited: { $sum: '$depositedAmount' },
+            totalConsumed: { $sum: '$consumedAmount' },
+            totalUsers: { $sum: 1 },
+          },
+        },
+      ]);
+
+      if (stats.length === 0) {
+        return {
+          totalDeposited: 0,
+          totalConsumed: 0,
+          totalUsers: 0,
+        };
+      }
+
+      return stats[0];
+    } catch (error: any) {
+      if (error.name === 'MongooseError' || error.message?.includes('buffering timed out')) {
+        console.warn('MongoDB operation failed, returning default stats:', error.message);
+        return {
+          totalDeposited: 0,
+          totalConsumed: 0,
+          totalUsers: 0,
+        };
+      }
+      throw error;
+    }
   }
 
   /**
    * Get unsettled usage records (for batch settlement)
    */
   public async getUnsettledRecords(limit: number = 100): Promise<any[]> {
-    return await UsageRecord.find({ settled: false })
-      .sort({ timestamp: 1 })
-      .limit(limit)
-      .lean();
+    if (!this.isMongoConnected()) {
+      console.warn('MongoDB not connected, returning empty unsettled records');
+      return [];
+    }
+
+    try {
+      return await UsageRecord.find({ settled: false })
+        .sort({ timestamp: 1 })
+        .limit(limit)
+        .lean();
+    } catch (error: any) {
+      if (error.name === 'MongooseError' || error.message?.includes('buffering timed out')) {
+        console.warn('MongoDB operation failed, returning empty unsettled records:', error.message);
+        return [];
+      }
+      throw error;
+    }
   }
 
   /**
    * Mark records as settled
    */
   public async markAsSettled(recordIds: string[], txHash: string): Promise<void> {
+    if (!this.isMongoConnected()) {
+      throw new Error('MongoDB not connected. Cannot mark records as settled.');
+    }
+
     await UsageRecord.updateMany(
       { _id: { $in: recordIds } },
       { $set: { settled: true, txHash } }

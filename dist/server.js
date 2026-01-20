@@ -83,9 +83,46 @@ if (process.env.USE_MORGAN !== 'false') {
 }
 // Database Connection
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/suban_ai';
-mongoose_1.default.connect(MONGODB_URI)
-    .then(() => logger_1.default.info('MongoDB Connected', { uri: MONGODB_URI.replace(/\/\/.*@/, '//***@') }))
-    .catch((err) => logger_1.default.error('MongoDB Connection Error', { error: err.message }));
+// MongoDB connection options for Atlas
+const mongooseOptions = {
+    serverSelectionTimeoutMS: 30000, // 30 seconds timeout for server selection
+    socketTimeoutMS: 45000, // 45 seconds timeout for socket operations
+    connectTimeoutMS: 30000, // 30 seconds timeout for initial connection
+    retryWrites: true, // Enable retryable writes
+    retryReads: true, // Enable retryable reads
+    directConnection: false, // Allow SRV connection (required for Atlas)
+};
+// MongoDB connection event handlers for better debugging
+mongoose_1.default.connection.on('connected', () => {
+    logger_1.default.info('MongoDB Connected', { uri: MONGODB_URI.replace(/\/\/.*@/, '//***@') });
+});
+mongoose_1.default.connection.on('error', (err) => {
+    logger_1.default.error('MongoDB Connection Error', {
+        error: err.message,
+        stack: err.stack
+    });
+});
+mongoose_1.default.connection.on('disconnected', () => {
+    logger_1.default.warn('MongoDB Disconnected');
+});
+mongoose_1.default.connection.on('reconnected', () => {
+    logger_1.default.info('MongoDB Reconnected');
+});
+// Handle process termination
+process.on('SIGINT', () => __awaiter(void 0, void 0, void 0, function* () {
+    yield mongoose_1.default.connection.close();
+    logger_1.default.info('MongoDB connection closed due to application termination');
+    process.exit(0);
+}));
+mongoose_1.default.connect(MONGODB_URI, mongooseOptions)
+    .catch((err) => {
+    logger_1.default.error('MongoDB Initial Connection Error', {
+        error: err.message,
+        stack: err.stack,
+        note: 'Connection will retry automatically. If this persists, check your MONGODB_URI and network connectivity.'
+    });
+    // Don't exit the process - allow server to continue (might be network issue)
+});
 // Routes (Placeholders)
 app.get('/', (req, res) => {
     res.send('AI Suban API is running');

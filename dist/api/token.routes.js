@@ -27,6 +27,7 @@ const router = (0, express_1.Router)();
  * Get user token balance
  */
 router.get('/balance/:walletAddress', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     try {
         const { walletAddress } = req.params;
         if (!walletAddress) {
@@ -43,6 +44,13 @@ router.get('/balance/:walletAddress', (req, res) => __awaiter(void 0, void 0, vo
     }
     catch (error) {
         console.error('Error fetching balance:', error);
+        // If it's a MongoDB timeout, return a more helpful error
+        if (error.name === 'MongooseError' && ((_a = error.message) === null || _a === void 0 ? void 0 : _a.includes('buffering timed out'))) {
+            return res.status(503).json({
+                error: 'Database temporarily unavailable',
+                message: 'MongoDB connection timed out. Please check your database connection.'
+            });
+        }
         res.status(500).json({ error: 'Failed to fetch balance' });
     }
 }));

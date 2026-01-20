@@ -33,6 +33,13 @@ router.get('/balance/:walletAddress', async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     console.error('Error fetching balance:', error);
+    // If it's a MongoDB timeout, return a more helpful error
+    if (error.name === 'MongooseError' && error.message?.includes('buffering timed out')) {
+      return res.status(503).json({ 
+        error: 'Database temporarily unavailable',
+        message: 'MongoDB connection timed out. Please check your database connection.'
+      });
+    }
     res.status(500).json({ error: 'Failed to fetch balance' });
   }
 });
