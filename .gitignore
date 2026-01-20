@@ -3,3 +3,9 @@ node_modules
 /node_modules
 logs/
 dist/
+/logs/
+/logs
+logs
+
+/logs/combined.log
+/logs/error.log

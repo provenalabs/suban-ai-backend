@@ -807,3 +807,15 @@
 {"duration":"1ms","level":"info","message":"API Response","requestId":"b05b3d7f-c1a9-483b-9166-634ab7032001","service":"suban-ai-backend","statusCode":200,"timestamp":"2026-01-20 08:02:46"}
 {"level":"info","message":"API Request","method":"GET","path":"/api/token/price","requestId":"6c4b4d3c-41db-44ac-b0ed-aa7e3bc79363","service":"suban-ai-backend","timestamp":"2026-01-20 08:02:46"}
 {"duration":"1ms","level":"info","message":"API Response","requestId":"6c4b4d3c-41db-44ac-b0ed-aa7e3bc79363","service":"suban-ai-backend","statusCode":200,"timestamp":"2026-01-20 08:02:46"}
+{"level":"info","message":"API Request","method":"GET","path":"/api/token/balance/22hrGCE1Q2khNo8G2B2hhfnaAxZiwf6AVtoDnRVD2sv8","requestId":"5e5cb2b6-bd1f-4093-a4ef-6c260b1235c1","service":"suban-ai-backend","timestamp":"2026-01-20 08:03:16"}
+{"duration":"1ms","level":"info","message":"API Response","requestId":"5e5cb2b6-bd1f-4093-a4ef-6c260b1235c1","service":"suban-ai-backend","statusCode":200,"timestamp":"2026-01-20 08:03:16"}
+{"level":"info","message":"API Request","method":"GET","path":"/api/token/price","requestId":"8f5d3972-5140-41b6-bc79-483a65314547","service":"suban-ai-backend","timestamp":"2026-01-20 08:03:16"}
+{"duration":"445ms","level":"info","message":"API Response","requestId":"8f5d3972-5140-41b6-bc79-483a65314547","service":"suban-ai-backend","statusCode":200,"timestamp":"2026-01-20 08:03:16"}
+{"level":"info","message":"API Request","method":"GET","path":"/api/token/balance/22hrGCE1Q2khNo8G2B2hhfnaAxZiwf6AVtoDnRVD2sv8","requestId":"01c97575-1242-461e-842d-b4b61a7516cc","service":"suban-ai-backend","timestamp":"2026-01-20 08:03:46"}
+{"duration":"3ms","level":"info","message":"API Response","requestId":"01c97575-1242-461e-842d-b4b61a7516cc","service":"suban-ai-backend","statusCode":200,"timestamp":"2026-01-20 08:03:46"}
+{"level":"info","message":"API Request","method":"GET","path":"/api/token/price","requestId":"fa1ebfb1-c642-4477-94be-83fb04c0716b","service":"suban-ai-backend","timestamp":"2026-01-20 08:03:46"}
+{"duration":"2ms","level":"info","message":"API Response","requestId":"fa1ebfb1-c642-4477-94be-83fb04c0716b","service":"suban-ai-backend","statusCode":200,"timestamp":"2026-01-20 08:03:46"}
+{"level":"info","message":"API Request","method":"GET","path":"/api/token/balance/22hrGCE1Q2khNo8G2B2hhfnaAxZiwf6AVtoDnRVD2sv8","requestId":"18c5b501-9777-4c83-a535-cf582dd72c00","service":"suban-ai-backend","timestamp":"2026-01-20 08:04:16"}
+{"duration":"2ms","level":"info","message":"API Response","requestId":"18c5b501-9777-4c83-a535-cf582dd72c00","service":"suban-ai-backend","statusCode":200,"timestamp":"2026-01-20 08:04:16"}
+{"level":"info","message":"API Request","method":"GET","path":"/api/token/price","requestId":"d6fb7575-b5ac-4cf2-ba0d-07077d895efd","service":"suban-ai-backend","timestamp":"2026-01-20 08:04:16"}
+{"duration":"4ms","level":"info","message":"API Response","requestId":"d6fb7575-b5ac-4cf2-ba0d-07077d895efd","service":"suban-ai-backend","statusCode":200,"timestamp":"2026-01-20 08:04:16"}
