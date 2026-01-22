@@ -169,7 +169,7 @@ class SolanaConnectionService {
     setInterval(async () => {
       const isHealthy = await this.testConnection();
       if (!isHealthy) {
-        console.warn('⚠️  Solana RPC connection is unhealthy. Some features may be degraded.');
+        console.warn('Solana RPC connection is unhealthy. Some features may be degraded.');
       }
     }, intervalMs);
   }

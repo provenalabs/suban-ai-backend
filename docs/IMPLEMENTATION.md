@@ -133,6 +133,11 @@ Example output:
 but historically 65% of cases showed continuation. Consider your 
 risk tolerance."
 
+Voice Companion Persona (Grok Voice Agent)
+- Voice uses a Companion persona only (no toggle): companion/friend, not assistant. Never "AI" language.
+- Brevity: 1–3 sentences per turn; follow-up questions over monologues.
+- Comprehensive arsenal of filler words and reactions for relatability (see AI.md, grok-voice.service.ts).
+
 STAGE 5 — DEEPSEEK & GROK API INTEGRATION
 DeepSeek Service Implementation
 // deepseek.service.ts

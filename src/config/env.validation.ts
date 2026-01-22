@@ -116,7 +116,7 @@ export class EnvValidator {
         let report = '\n=== Environment Variable Validation ===\n\n';
 
         if (result.errors.length > 0) {
-            report += '❌ ERRORS (Required variables missing):\n';
+            report += 'ERRORS (Required variables missing):\n';
             result.errors.forEach(error => {
                 report += `   - ${error}\n`;
             });
@@ -124,7 +124,7 @@ export class EnvValidator {
         }
 
         if (result.warnings.length > 0) {
-            report += '⚠️  WARNINGS (Optional but recommended):\n';
+            report += 'WARNINGS (Optional but recommended):\n';
             result.warnings.forEach(warning => {
                 report += `   - ${warning}\n`;
             });
@@ -132,7 +132,7 @@ export class EnvValidator {
         }
 
         if (result.isValid) {
-            report += '✅ All required environment variables are set.\n';
+            report += 'All required environment variables are set.\n';
         }
 
         report += '\n';
@@ -157,7 +157,7 @@ if (require.main === module) {
     console.log(envValidator.getReport());
     
     if (!result.isValid) {
-        console.error('❌ Environment validation failed. Please fix the errors above.');
+        console.error('Environment validation failed. Please fix the errors above.');
         process.exit(1);
     }
 }

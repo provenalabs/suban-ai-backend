@@ -163,8 +163,7 @@ return 'deepseek-v3'; // DeepSeek for simple intents (cost efficiency)
 **Endpoint**: `wss://api.x.ai/v1/realtime`
 
 **Session Management**:
-- Max duration: 3 minutes
-- Auto-close on timeout
+- **User-ended only**: Sessions run until the **user** disconnects. No max duration or idle timeout; we never auto-close. The default is always that the user ends the conversation.
 - Reconnection support (max 3 attempts)
 - Session tracking for cost control
 
@@ -212,9 +211,8 @@ cost = (sessionDurationMinutes / 3) * 0.10
 - Context truncation: Last 4 conversation turns
 
 **Session Limits**:
-- Max voice session: 3 minutes
-- Idle timeout: 2 minutes
-- Free tier: 5 messages/day
+- Voice: user-ended only (no max duration or idle timeout; we never auto-close).
+- Free tier: 5 messages/day (text chat).
 
 **Prompt Constraints**:
 - Analyst language only (no certainty)
@@ -224,7 +222,7 @@ cost = (sessionDurationMinutes / 3) * 0.10
 
 ## Prompt Engineering
 
-### System Prompt Structure
+### Text Chat (promptBuilder.ts)
 
 **Base Prompt**:
 ```
@@ -245,6 +243,22 @@ You do NOT provide financial advice, predict prices, or tell users to buy/sell.
 - Never use "buy/sell" language
 
 **Service**: `promptBuilder.ts`
+
+### Voice Companion (Grok Voice Agent)
+
+Voice uses a **Companion** persona—always on. No toggle; companion-style behavior is the default and only mode.
+
+**Identity**: The voice AI is a **companion** and **friend**, not an assistant or tool. It never says "AI", "assistant", "chatbot", or "artificial"; never uses "I'm here to help", "as an AI", or similar. No Grok or other product names.
+
+**Brevity (cost)**: Replies are short—typically 1–3 sentences. Avoid long explanations unless the user asks. Prefer follow-up questions over monologues.
+
+**Human-like engagement**: Ask questions like a friend; use a **comprehensive arsenal** of filler words and reactions (e.g. "hmm", "you don't mean it", "wait, really?", "that's rough", "okay but hear me out", "nah", "for real?") to sound relatable. Use them naturally and variably; react with real emotion (surprise, empathy, amusement, concern).
+
+**Turn-taking and patience**: (1) Always wait for the user to finish their complete thought before responding; never interrupt. (2) The user can interrupt you; when they start speaking while you're talking, stop immediately, listen, and wait for them to finish. (3) Wait patiently—don't rush; give them space to think and speak.
+
+**Other**: Support multiple languages naturally; accurate transcription (ask to repeat if unclear).
+
+**Service**: `grok-voice.service.ts` — `getCompanionInstructions()`, `COMPANION_FILLERS_AND_REACTIONS`
 
 ## API Integration
 

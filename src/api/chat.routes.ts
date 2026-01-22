@@ -76,9 +76,10 @@ router.post('/message', chatRateLimiter, verifyWallet, async (req: Request, res:
         const sessionId = `chat-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
         const userIdentifier = userId || walletAddress;
 
-        // Process chat request with intelligent routing
+        // Text chat always uses DeepSeek (voice companion uses Grok)
+        // Force DeepSeek by using 'free' tier which always routes to DeepSeek
         const llmResponse = await llmService.generateResponse(message, {
-            userTier: tier,
+            userTier: 'free', // Force DeepSeek for text chat
             conversationHistory: conversationHistory || [],
             maxTokens: 500, // Cost control
             temperature: 0.7,

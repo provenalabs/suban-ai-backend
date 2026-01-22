@@ -7,9 +7,7 @@ import { voiceRateLimiter, costCalculationRateLimiter } from '../middleware/rate
 
 const router = Router();
 
-// Max voice session duration: 3 minutes
-const MAX_SESSION_DURATION_MS = 180000;
-const ESTIMATED_VOICE_SESSION_COST_USD = 0.10; // Estimated cost per 3-minute session
+const ESTIMATED_VOICE_SESSION_COST_USD = 0.10; // Estimated cost per session
 
 /**
  * POST /api/voice/session
@@ -64,7 +62,6 @@ router.post('/session', voiceRateLimiter, verifyWallet, async (req: Request, res
         }
 
         // Create voice session
-        console.log('🎤 Creating Grok Voice session...');
         const session = await voiceService.createSession({
             model: model || 'grok-4-1-fast-non-reasoning',
             voice: voice || 'Ara',
@@ -72,13 +69,10 @@ router.post('/session', voiceRateLimiter, verifyWallet, async (req: Request, res
             temperature: temperature || 0.7,
         });
 
-        console.log('✅ Grok Voice session created:', session.sessionId);
-
         res.json({
             sessionId: session.sessionId,
             message: 'Voice session created. Connect via WebSocket to /api/voice/ws/:sessionId',
             wsUrl: `/api/voice/ws/${session.sessionId}`,
-            maxDuration: MAX_SESSION_DURATION_MS / 1000, // seconds
             estimatedCost: ESTIMATED_VOICE_SESSION_COST_USD,
         });
     } catch (error: any) {
@@ -105,8 +99,6 @@ router.get('/session/:sessionId', verifyWallet, async (req: Request, res: Respon
         res.json({
             ...sessionInfo,
             isValid,
-            maxDuration: MAX_SESSION_DURATION_MS / 1000,
-            remainingTime: isValid ? (MAX_SESSION_DURATION_MS - sessionInfo.duration) / 1000 : 0,
         });
     } catch (error: any) {
         console.error('Get session error:', error);
@@ -147,8 +139,7 @@ router.get('/cost', costCalculationRateLimiter, async (req: Request, res: Respon
             costTokens: requiredTokens,
             tokenPrice,
             serviceAvailable: voiceService.isAvailable(),
-            maxSessionDuration: MAX_SESSION_DURATION_MS / 1000, // seconds
-            note: 'All voice interactions use Grok Voice Agent WebSocket API',
+            note: 'All voice interactions use Grok Voice Agent WebSocket API. Sessions continue until manually closed.',
         });
     } catch (error: any) {
         console.error('Error calculating cost:', error);

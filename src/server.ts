@@ -115,7 +115,7 @@ mongoose.connect(MONGODB_URI, mongooseOptions)
 
 // Routes (Placeholders)
 app.get('/', (req, res) => {
-    res.send('AI Suban API is running');
+    res.send('Likable AI API is running');
 });
 
 // Import Routes
@@ -349,8 +349,9 @@ wss.on('connection', (ws: WebSocket, req) => {
     session.on('close', () => {
         logger.warn('Grok Voice session closed', { sessionId });
         // Close client WebSocket if Grok session closes
+        // Use code 1001 (going away) instead of 1000 to indicate server-initiated close
         if (ws.readyState === WebSocket.OPEN) {
-            ws.close(1000, 'Grok session closed');
+            ws.close(1001, 'Grok session closed');
         }
     });
     session.on('error', (error: Error) => {
@@ -414,16 +415,6 @@ wss.on('connection', (ws: WebSocket, req) => {
             if (!(ws as any)._messageLogCount) {
                 (ws as any)._messageLogCount = 0;
             }
-            if ((ws as any)._messageLogCount < 5) {
-                logger.info('📨 Received WebSocket message from client', { 
-                    sessionId,
-                    type: data.type,
-                    hasData: !!data.data,
-                    dataLength: data.data?.length,
-                    count: (ws as any)._messageLogCount + 1
-                });
-                (ws as any)._messageLogCount++;
-            }
 
             if (data.type === 'audio' && data.data) {
                 try {
@@ -432,15 +423,6 @@ wss.on('connection', (ws: WebSocket, req) => {
                     // Debug: log first few audio messages to verify streaming
                     if (!(ws as any)._audioLogCount) {
                         (ws as any)._audioLogCount = 0;
-                    }
-                    if ((ws as any)._audioLogCount < 5) {
-                        logger.info('📤 Forwarding audio to Grok', { 
-                            sessionId, 
-                            audioSize: audioBuffer.length,
-                            base64Length: data.data.length,
-                            count: (ws as any)._audioLogCount + 1
-                        });
-                        (ws as any)._audioLogCount++;
                     }
                     session.sendAudio(audioBuffer);
                 } catch (audioError: any) {
@@ -467,10 +449,7 @@ wss.on('connection', (ws: WebSocket, req) => {
                     }));
                 }
             } else if (data.type === 'input_audio_buffer.commit') {
-                // With server_vad, commit is automatic - log if client sends it manually
-                logger.warn('⚠️ Client sent manual commit (server_vad handles this automatically)', { sessionId });
-                // Don't forward manual commits with server_vad - let the server handle it
-                // session.commitAudioBuffer();
+                // With server_vad, commit is automatic - don't forward manual commits
             } else {
                 // Unknown message type - log but don't error
                 logger.debug('Unknown WebSocket message type', { type: data.type, sessionId });
@@ -522,7 +501,7 @@ wss.on('connection', (ws: WebSocket, req) => {
 // Start Server
 server.listen(PORT, async () => {
     logger.info(`Server started`, { port: PORT, env: process.env.NODE_ENV || 'development' });
-    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`Server running on port ${PORT}`);
     await initializeSolanaServices();
 });
 

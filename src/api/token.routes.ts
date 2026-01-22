@@ -1,12 +1,15 @@
 import { Router, Request, Response } from 'express';
+import { PublicKey } from '@solana/web3.js';
+import { getAssociatedTokenAddress } from '@solana/spl-token';
 import balanceTracker from '../services/solana/balance-tracker.service';
 import priceOracle from '../services/solana/price-oracle.service';
 import settlementService from '../services/solana/settlement.service';
 import transactionVerifier from '../services/solana/transaction-verifier.service';
 import jupiterService from '../services/solana/jupiter.service';
+import solanaConnection from '../services/solana/connection.service';
 import { TokenBalance } from '../models/TokenBalance';
 import { verifyAdmin } from '../middleware/auth.middleware';
-import { settlementRateLimiter, costCalculationRateLimiter } from '../middleware/rateLimit.middleware';
+import { settlementRateLimiter, costCalculationRateLimiter, scanRateLimiter } from '../middleware/rateLimit.middleware';
 
 const router = Router();
 
@@ -155,6 +158,80 @@ router.post('/deposit', async (req: Request, res: Response) => {
   } catch (error: any) {
     console.error('Error recording deposit:', error);
     res.status(500).json({ error: 'Failed to record deposit' });
+  }
+});
+
+/**
+ * POST /api/token/deposit/scan
+ * Scan user ATA for recent incoming token transfers, verify and credit new ones.
+ */
+router.post('/deposit/scan', scanRateLimiter, async (req: Request, res: Response) => {
+  try {
+    const { walletAddress } = req.body;
+
+    if (!walletAddress || typeof walletAddress !== 'string') {
+      return res.status(400).json({
+        error: 'Missing or invalid walletAddress',
+      });
+    }
+
+    const tokenMint = process.env.TOKEN_MINT_ADDRESS;
+    if (!tokenMint) {
+      return res.status(503).json({
+        error: 'Token mint not configured',
+        message: 'TOKEN_MINT_ADDRESS is not set.',
+      });
+    }
+
+    const connection = solanaConnection.getConnection();
+    const mintPk = new PublicKey(tokenMint);
+    const walletPk = new PublicKey(walletAddress);
+
+    const userAta = await getAssociatedTokenAddress(mintPk, walletPk);
+    const sigs = await connection.getSignaturesForAddress(userAta, { limit: 20 });
+
+    const credited: Array<{ txHash: string; amount: number }> = [];
+    let alreadyProcessed = 0;
+
+    for (const { signature } of sigs) {
+      const existing = await TokenBalance.findOne({ 'transactions.txHash': signature });
+      if (existing) {
+        alreadyProcessed += 1;
+        continue;
+      }
+
+      const verification = await transactionVerifier.verifyDepositTransaction(
+        signature,
+        walletAddress,
+        undefined,
+        tokenMint
+      );
+
+      if (!verification.isValid || verification.actualAmount == null || verification.actualAmount <= 0) {
+        continue;
+      }
+
+      await balanceTracker.recordDeposit(
+        walletAddress,
+        verification.actualAmount,
+        signature
+      );
+      credited.push({ txHash: signature, amount: verification.actualAmount });
+    }
+
+    res.json({
+      credited,
+      alreadyProcessed,
+    });
+  } catch (error: any) {
+    console.error('Error scanning deposits:', error);
+    if (error.message?.includes('could not find account')) {
+      return res.json({ credited: [], alreadyProcessed: 0 });
+    }
+    res.status(500).json({
+      error: 'Failed to scan deposits',
+      details: error.message,
+    });
   }
 });
 

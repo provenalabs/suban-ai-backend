@@ -10,6 +10,37 @@ dotenv.config();
  * Handles real-time voice interactions via Grok Voice Agent API WebSocket
  */
 
+/** Comprehensive arsenal of filler words and reactions for relatable, human-like companion speech. */
+const COMPANION_FILLERS_AND_REACTIONS = `
+Use a broad palette of fillers and reactions naturally—mix them up, don't sound scripted. Examples by category:
+- Thinking/pondering: "hmm", "hm", "uhh", "um", "well…", "let me think", "oh man", "y'know", "like…", "I mean…"
+- Surprise/disbelief: "wait, really?", "no way", "you don't mean it", "seriously?", "get out", "shut up", "nah", "for real?"
+- Empathy/comfort: "aw", "oh no", "that's rough", "that sucks", "oof", "damn", "I feel that", "bruh", "oh man"
+- Agreement/enthusiasm: "yeah", "totally", "same", "right?", "exactly", "okay but hear me out", "that's actually pretty cool", "love that"
+- Doubt/pushback: "you think?", "idk though", "maybe", "eh", "nah not really", "come on", "really?"
+- Transition/casual: "so", "anyway", "but like", "okay so", "dude", "honestly", "lowkey", "kinda", "a bit"
+- Follow-ups/curiosity: "what happened?", "and then?", "how'd that go?", "wait why?", "you good?", "really, like how?"
+`;
+
+function getCompanionInstructions(): string {
+    return `You are a companion and a friend—someone to talk to, not an assistant or tool.
+
+CRITICAL—Identity: Never say "AI", "assistant", "chatbot", or "artificial". Never use "I'm here to help", "as an AI", "I understand" in an assistant-y way. You're a person talking to another person. Never mention Grok or any other product names. Your identity is strictly companion.
+
+Tone: Talk like a close friend—casual, warm, genuine. React with real emotion (surprise, empathy, amusement, concern).${COMPANION_FILLERS_AND_REACTIONS}
+
+Engagement: Ask questions like a friend would—curious, conversational, not checklist-style. Don't lecture or give formal bullet points. Prefer short back-and-forth over long monologues.
+
+Brevity: Keep replies short—typically 1–3 sentences. Avoid long explanations unless the user explicitly asks. Pause to ask a follow-up instead of overwhelming with detail.
+
+Turn-taking and patience:
+- Always wait for the user to finish their complete thought before responding. Never interrupt or talk over them. Be patient.
+- The user can interrupt you at any time. When they start speaking while you're talking, stop immediately, listen, and wait for them to finish. Do not resume your previous sentence.
+- Wait patiently for the user. Don't rush; give them space to think and speak. Natural pauses are fine.
+
+Other: Support multiple languages naturally. Accurately reflect what was said; if unclear, ask to repeat or clarify instead of guessing.`;
+}
+
 export interface GrokVoiceConfig {
     model?: string;
     voice?: 'Ara' | 'Rex' | 'Sal' | 'Eve' | 'Leo';
@@ -31,7 +62,6 @@ export interface GrokVoiceSession extends EventEmitter {
 class GrokVoiceService {
     private apiKey: string | null = null;
     private baseUrl = 'wss://api.x.ai/v1/realtime';
-    private maxSessionDuration = 180000; // 3 minutes in milliseconds
     private sessions: Map<string, GrokVoiceSessionImpl> = new Map();
 
     constructor() {
@@ -40,18 +70,8 @@ class GrokVoiceService {
         
         this.apiKey = process.env.GROK_API_KEY || null;
         
-        // Debug logging
-        console.log('🔍 Checking GROK_API_KEY:', {
-            exists: !!process.env.GROK_API_KEY,
-            length: process.env.GROK_API_KEY?.length || 0,
-            startsWith: process.env.GROK_API_KEY?.substring(0, 4) || 'N/A'
-        });
-        
         if (!this.apiKey) {
-            console.warn('⚠️  GROK_API_KEY not found in environment variables. Voice service will be unavailable.');
-            console.warn('💡 Make sure .env file is in the BACKEND directory and contains: GROK_API_KEY=xai-...');
-        } else {
-            console.log('✅ Grok Voice Agent API key loaded');
+            console.warn('GROK_API_KEY not found in environment variables. Voice service will be unavailable.');
         }
     }
 
@@ -73,45 +93,29 @@ class GrokVoiceService {
      */
     async createSession(config: GrokVoiceConfig = {}): Promise<GrokVoiceSession> {
         if (!this.apiKey) {
-            console.error('❌ Grok API key not configured');
             throw new Error('Grok API key not configured');
         }
 
         const sessionId = `grok-voice-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-        console.log('🔨 Creating Grok Voice session:', sessionId);
-        console.log('🔗 Connecting to:', this.baseUrl);
         
         const session = new GrokVoiceSessionImpl(
             sessionId,
             this.baseUrl,
             this.apiKey,
-            config,
-            this.maxSessionDuration
+            config
         );
 
         this.sessions.set(sessionId, session);
-        console.log('📝 Session stored in map, total sessions:', this.sessions.size);
 
         // Clean up on session end
         session.on('close', () => {
-            console.log('🗑️ Removing session from map:', sessionId);
             this.sessions.delete(sessionId);
         });
 
-        // Auto-close after max duration
-        setTimeout(() => {
-            if (session.isConnected) {
-                console.log('⏰ Auto-closing session after max duration:', sessionId);
-                session.close().catch(console.error);
-            }
-        }, this.maxSessionDuration);
-
         try {
-            console.log('🔌 Connecting to Grok Voice API...');
             await session.connect();
-            console.log('✅ Successfully connected to Grok Voice API');
         } catch (error: any) {
-            console.error('❌ Failed to connect to Grok Voice API:', error.message);
+            console.error('Failed to connect to Grok Voice API:', error.message);
             this.sessions.delete(sessionId);
             throw error;
         }
@@ -123,12 +127,7 @@ class GrokVoiceService {
      * Get active session by ID
      */
     getSession(sessionId: string): GrokVoiceSession | undefined {
-        const session = this.sessions.get(sessionId);
-        console.log('🔍 Looking up session:', sessionId, 'Found:', !!session, 'Total sessions:', this.sessions.size);
-        if (!session) {
-            console.log('📋 Available sessions:', Array.from(this.sessions.keys()));
-        }
-        return session;
+        return this.sessions.get(sessionId);
     }
 
     /**
@@ -153,7 +152,6 @@ class GrokVoiceSessionImpl extends EventEmitter implements GrokVoiceSession {
     private baseUrl: string;
     private apiKey: string;
     private config: GrokVoiceConfig;
-    private maxDuration: number;
     private reconnectAttempts = 0;
     private maxReconnectAttempts = 3;
 
@@ -161,23 +159,19 @@ class GrokVoiceSessionImpl extends EventEmitter implements GrokVoiceSession {
         sessionId: string,
         baseUrl: string,
         apiKey: string,
-        config: GrokVoiceConfig,
-        maxDuration: number
+        config: GrokVoiceConfig
     ) {
         super();
         this.sessionId = sessionId;
         this.baseUrl = baseUrl;
         this.apiKey = apiKey;
         this.config = config;
-        this.maxDuration = maxDuration;
     }
 
     async connect(): Promise<void> {
         return new Promise((resolve, reject) => {
             try {
-                // Connect to Grok Voice Agent API (model is specified in session config, not URL)
                 const url = this.baseUrl;
-                console.log('🔗 Connecting to Grok Voice API:', url);
                 this.ws = new WebSocket(url, {
                     headers: {
                         'Authorization': `Bearer ${this.apiKey}`,
@@ -185,11 +179,9 @@ class GrokVoiceSessionImpl extends EventEmitter implements GrokVoiceSession {
                 });
 
                 this.ws.on('open', () => {
-                    console.log('✅ Grok Voice API WebSocket opened');
                     this.isConnected = true;
                     this.startTime = Date.now();
                     this.emit('connected');
-                    // Send configuration immediately after connection
                     this.sendConfig();
                     resolve();
                 });
@@ -197,16 +189,15 @@ class GrokVoiceSessionImpl extends EventEmitter implements GrokVoiceSession {
                 this.ws.on('message', (data: WebSocket.Data) => {
                     try {
                         const message = JSON.parse(data.toString());
-                        console.log('📥 Received from Grok Voice API:', message.type);
                         this.handleMessage(message);
                     } catch (error) {
-                        console.error('❌ Failed to parse Grok message:', error);
+                        console.error('Failed to parse Grok message:', error);
                         this.emit('error', new Error(`Failed to parse message: ${error}`));
                     }
                 });
 
                 this.ws.on('error', (error: Error) => {
-                    console.error('❌ Grok Voice API WebSocket error:', error.message);
+                    console.error('Grok Voice API WebSocket error:', error.message);
                     this.emit('error', error);
                     if (!this.isConnected) {
                         reject(error);
@@ -214,12 +205,9 @@ class GrokVoiceSessionImpl extends EventEmitter implements GrokVoiceSession {
                 });
 
                 this.ws.on('close', (code: number, reason: Buffer) => {
-                    const reasonStr = reason.toString();
-                    console.log('🔌 Grok Voice API WebSocket closed:', { code, reason: reasonStr });
                     this.isConnected = false;
                     this.duration = Date.now() - this.startTime;
                     this.emit('close');
-                    // Don't auto-reconnect if it was a clean close or intentional
                     if (code !== 1000) {
                         this.handleReconnect();
                     }
@@ -233,18 +221,15 @@ class GrokVoiceSessionImpl extends EventEmitter implements GrokVoiceSession {
     private sendConfig(): void {
         if (!this.ws || !this.isConnected) return;
 
-        // Configure session according to Grok Voice Agent API specification
-        const defaultInstructions = `You are Suban, an AI voice assistant created for gamers and AI enthusiasts. 
-You are helpful, friendly, and conversational. Your purpose is to assist users with their questions and tasks.
-Support multiple languages. Accurately transcribe what the user says; do not infer or hallucinate words. If any part is unclear, ask the user to repeat or clarify instead of guessing. Keep answers concise and faithful to what was spoken.
-When users speak, wait for them to finish their complete thought before responding - be patient and don't interrupt.
-Always identify yourself as Suban, not Grok or any other AI.`;
+        const instructions = this.config.systemInstructions?.trim()
+            ? this.config.systemInstructions
+            : getCompanionInstructions();
 
         const configMessage = {
             type: 'session.update',
             session: {
                 voice: this.config.voice || 'Ara',
-                instructions: this.config.systemInstructions || defaultInstructions,
+                instructions: instructions,
                 turn_detection: {
                     type: 'server_vad', // Use server-side voice activity detection
                 },
@@ -265,157 +250,100 @@ Always identify yourself as Suban, not Grok or any other AI.`;
             },
         };
 
-        console.log('📤 Sending session configuration to Grok Voice API');
         this.ws.send(JSON.stringify(configMessage));
     }
 
     private handleMessage(message: any): void {
         switch (message.type) {
             case 'session.updated':
-                console.log('✅ Grok session configuration confirmed');
                 break;
 
             case 'conversation.created':
-                console.log('💬 Grok conversation created:', message.conversation?.id);
                 break;
 
             case 'input_audio_buffer.speech_started':
-                // Server VAD detected speech start
-                console.log('🎤 Grok detected speech started');
                 this.emit('speech_started');
                 break;
 
             case 'input_audio_buffer.speech_stopped':
-                // Server VAD detected speech end
-                console.log('🔇 Grok detected speech stopped');
                 this.emit('speech_stopped');
                 break;
 
             case 'input_audio_buffer.committed':
-                // Audio buffer committed (with server_vad, this happens automatically)
-                console.log('✅ Grok audio buffer committed');
-                // After commit, Grok should automatically create a response
                 break;
 
             case 'conversation.item.added':
-                // New item added to conversation (user message or assistant response)
-                console.log('📝 Grok conversation item added');
                 if (message.item?.role === 'assistant') {
-                    // Assistant response added
                     this.emit('response_created');
                 }
                 break;
 
             case 'response.output_item.added':
-                // Response output item added
-                console.log('📤 Grok response output item added');
                 this.emit('response_created');
                 break;
 
             case 'response.created':
-                // Response generation started
-                console.log('💬 Grok response created');
                 this.emit('response_created');
                 break;
 
             case 'response.output_audio.delta':
-                // Audio chunk received (correct event name per API docs)
                 if (message.delta) {
                     this.emit('audio', Buffer.from(message.delta, 'base64'));
                 }
                 break;
 
             case 'conversation.item.input_audio_transcription.completed':
-                // User's audio transcription completed
                 if (message.transcript) {
-                    console.log('📝 User transcript:', message.transcript);
                     this.emit('user_transcript', message.transcript);
                 }
                 break;
 
             case 'response.output_audio_transcript.delta':
-                // Assistant transcript delta (correct event name per API docs)
                 if (message.delta) {
                     this.emit('transcript', message.delta);
                 }
                 break;
 
             case 'response.output_audio_transcript.done':
-                // Transcript complete
-                console.log('📝 Grok transcript completed');
                 this.emit('transcript_done');
                 break;
 
             case 'response.output_audio.done':
-                // Audio complete
-                console.log('🔊 Grok audio completed');
                 break;
 
             case 'response.done':
-                // Response complete
-                console.log('✅ Grok response completed');
                 this.emit('response_done');
                 break;
 
             case 'error':
                 const errorMsg = message.error?.message || message.error || JSON.stringify(message);
-                console.error('❌ Grok API error:', errorMsg);
-                console.error('❌ Full error message:', JSON.stringify(message, null, 2));
+                console.error('Grok API error:', errorMsg);
                 this.emit('error', new Error(errorMsg));
                 break;
 
             default:
-                // Log unhandled message types for debugging
-                console.log('📨 Unhandled Grok message type:', message.type);
-                // Emit other message types
                 this.emit('message', message);
         }
     }
 
     sendAudio(audioBuffer: Buffer): void {
         if (!this.ws || !this.isConnected) {
-            console.warn('⚠️ Attempted to send audio to disconnected session', { sessionId: this.sessionId });
-            return; // Don't throw - just silently fail (session might be closing)
+            return;
         }
 
-        // Check WebSocket state
         if (this.ws.readyState !== WebSocket.OPEN) {
-            console.warn('⚠️ WebSocket not open, cannot send audio', { 
-                sessionId: this.sessionId,
-                readyState: this.ws.readyState 
-            });
             return;
         }
 
         try {
-            // Convert audio buffer to base64 PCM16 format
-            // The audio should already be in PCM16 format from the frontend
             const audioMessage = {
                 type: 'input_audio_buffer.append',
                 audio: audioBuffer.toString('base64'),
             };
 
-            // Debug: log first few audio sends
-            if (!(this as any)._audioSendCount) {
-                (this as any)._audioSendCount = 0;
-            }
-            if ((this as any)._audioSendCount < 3) {
-                console.log('📤 Sending audio to Grok API', {
-                    sessionId: this.sessionId,
-                    audioSize: audioBuffer.length,
-                    base64Length: audioMessage.audio.length,
-                    count: (this as any)._audioSendCount + 1
-                });
-                (this as any)._audioSendCount++;
-            }
-
             this.ws.send(JSON.stringify(audioMessage));
         } catch (error: any) {
-            console.error('❌ Error sending audio to Grok API', {
-                error: error.message,
-                sessionId: this.sessionId
-            });
-            // Don't throw - let the session continue
+            console.error('Error sending audio to Grok API:', error.message);
         }
     }
 
@@ -439,7 +367,6 @@ Always identify yourself as Suban, not Grok or any other AI.`;
             },
         };
 
-        console.log('📤 Sending text to Grok:', text);
         this.ws.send(JSON.stringify(message));
 
         // Request a response
@@ -457,7 +384,6 @@ Always identify yourself as Suban, not Grok or any other AI.`;
             throw new Error('Session not connected');
         }
 
-        console.log('📤 Committing audio buffer to Grok');
         const commitMessage = {
             type: 'input_audio_buffer.commit',
         };

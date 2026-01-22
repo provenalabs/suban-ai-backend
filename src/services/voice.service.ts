@@ -14,8 +14,6 @@ export interface VoiceSessionInfo {
 }
 
 class VoiceService {
-    private readonly MAX_SESSION_DURATION = 180000; // 3 minutes in milliseconds
-
     constructor() {
         // Service is initialized via constructor
     }
@@ -84,9 +82,8 @@ class VoiceService {
     isSessionValid(sessionId: string): boolean {
         const session = grokVoiceService.getSession(sessionId);
         if (!session) return false;
-
-        const duration = Date.now() - session.startTime;
-        return duration < this.MAX_SESSION_DURATION;
+        // Sessions are valid as long as they're connected (no time limit)
+        return session.isConnected;
     }
 }
 

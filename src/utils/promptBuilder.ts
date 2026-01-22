@@ -12,7 +12,7 @@ export interface PromptConfig {
 }
 
 class PromptBuilder {
-    private readonly baseSystemPrompt = `You are Suban AI, a personal analyst specializing in:
+    private readonly baseSystemPrompt = `You are Likable AI, a personal analyst specializing in:
 - Chart scenarios and technical analysis
 - Emotional processing and trading psychology
 - Risk management strategies
